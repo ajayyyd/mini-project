@@ -38,10 +38,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         // User found, verify the password
         $row = $result->fetch_assoc();
-        if ($pass= $row['pwd']) {
+        if ($pass == $row['pwd']) {
+            echo "login succesful ";
+            // header("Location: donate.php");
             // Password is correct, redirect to index.html
-            header("Location: index.html");
-            exit();
+            $link_id = isset($_POST['link_id']) ? intval($_POST['link_id']) : 0;
+            echo $link_id;
+            
+            
+            if ($link_id > 0) {
+                echo $link_id;
+                echo "redirecting to donation form";
+                // header('Location: donate.php');
+            }
+            // elseif($link_id == 0){
+            //     echo "login succesful";
+            //     header('Location: index.html');
+                
+            //     exit();
+            // }
+            
+            
+            
+            
         } else {
             $error_message = "Invalid username or password.";
         }
