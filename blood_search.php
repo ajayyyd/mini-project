@@ -94,7 +94,7 @@
                 "Kannur": ["Kannur", "Thalassery", "Payyannur", "Mattannur", "Iritty", "Kuthuparamba", "Chakarakkal", "Panoor"],
                 "Kasaragod": ["Kasaragod", "Kanhangad", "Nileshwar", "Cheruvathur", "Manjeshwar", "Uppala", "Hosdurg"],
                 "Kollam": ["Kollam", "Punalur", "Karunagappally", "Paravur", "Kottarakkara", "Anchal", "Pathanapuram", "Chavara"],
-                "Kottayam": ["Kottayam", "Changanassery", "Pala", "Kanjirappally","Mundakayam", "Vaikom", "Ettumanoor", "Kaduthuruthy", "Erattupetta"],
+                "Kottayam": ["Kottayam", "Changanassery", "Pala", "Kanjirappally","Mundakayam", "Vaikom", "Ettumanoor","Kuravilangadu", "Kaduthuruthy", "Erattupetta"],
                 "Kozhikode": ["Kozhikode", "Vadakara", "Koyilandy", "Mukkam", "Feroke", "Ramanattukara", "Balussery", "Thiruvambady"],
                 "Malappuram": ["Malappuram", "Manjeri", "Tirur", "Perinthalmanna", "Ponnani", "Nilambur", "Kottakkal", "Kondotty"],
                 "Palakkad": ["Palakkad", "Ottapalam", "Shoranur", "Chittur", "Mannarkkad", "Alathur", "Cherpulassery", "Pattambi"],
@@ -120,6 +120,7 @@
     </script>
 </head>
 <body>
+    
     <div class="container">
         <h2>Search Blood Donors</h2>
         <form action="search.php" method="POST">
