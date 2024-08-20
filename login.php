@@ -9,7 +9,7 @@
 <body>
     <?php
 // This block will execute when the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
     // Database connection parameters
     $servername = "localhost";  // Use your database server name
     $username = "root";         // Your database username
@@ -39,18 +39,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // User found, verify the password
         $row = $result->fetch_assoc();
         if ($pass == $row['pwd']) {
-            echo "login succesful ";
+            
             // header("Location: donate.php");
             // Password is correct, redirect to index.html
-            $link_id = isset($_POST['link_id']) ? intval($_POST['link_id']) : 0;
-            echo $link_id;
-            
-            
-            if ($link_id > 0) {
-                echo $link_id;
-                echo "redirecting to donation form";
-                // header('Location: donate.php');
+            if (isset($_GET['run']) && $_GET['run'] == 'true'){
+                echo "login succesful ";
+                header('Location: donate.php');
             }
+            // $link_id = isset($_POST['link_id']) ? intval($_POST['link_id']) : 0;
+            // echo $link_id;
+            // header('Location: index.html');
+            
+            
+            // if ($link_id > 0) {
+            //     echo $link_id;
+            //     echo "redirecting to donation form";
+            //     // header('Location: donate.php');
+            // }
             // elseif($link_id == 0){
             //     echo "login succesful";
             //     header('Location: index.html');
