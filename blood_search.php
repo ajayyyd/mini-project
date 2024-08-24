@@ -165,7 +165,7 @@
         </form>
     </div>
 
-    <!-- <?php
+ <?php
 // Database connection details
 $servername = "localhost";
 $username = "root";
@@ -179,6 +179,23 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// check link id
+// Check if 'id' parameter is set
+if (isset($_GET['id'])) {
+    // Get the value of 'id' parameter
+    $id = $_GET['id'];
+    
+    // Validate and sanitize the 'id' parameter
+    $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+    header('Location: login.php');
+}
+    
+//     // Output the ID (or use it for further processing)
+//     echo "The ID is: " . htmlspecialchars($id);
+// } else {
+//     echo "ID parameter is not set.";
+// }
 
 // Get form data
 $state = $_POST['state'];
@@ -207,7 +224,7 @@ if ($result->num_rows > 0) {
 
 // Close connection
 $conn->close();
-?> -->
+?> 
 
 </body>
 </html>
