@@ -19,7 +19,7 @@ $district = strtolower($district);
 $city = strtolower($city);
 
 // SQL query to fetch data based on district, city, and blood group
-$sql = "SELECT  name, bldgrp, phno, email, availability FROM donordata WHERE bldgrp = '$bloodgroup' AND city = '$city' AND district = '$district'";
+$sql = "SELECT  name, bloodgroup, phno, email ,availability FROM donordata WHERE bloodgroup = '$bloodgroup' AND city = '$city' AND district = '$district'";
 $result = $conn->query($sql);
 ?>
 
@@ -106,7 +106,7 @@ $result = $conn->query($sql);
             $i=1;
             while($row = $result->fetch_assoc()) {
                 
-                echo "<tr><td>" .$i. "</td><td>".$row["name"]. "</td><td>" . $row["bldgrp"]. "</td><td>" . $row["phno"]."<br>".$row["email"]. "</td><td>" . $row["availability"]. "</td></tr>";
+                echo "<tr><td>" .$i. "</td><td>".$row["name"]. "</td><td>" . $row["bloodgroup"]. "</td><td>" . $row["phno"]."<br>".$row["email"]. "</td><td>" . $row["availability"]."</td></tr>";
                 $i=$i+1;
             }
             echo "</table>";

@@ -29,23 +29,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
     $pass = $_POST['password'];
 
     // SQL query to fetch the user data
-    $sql = "SELECT * FROM userdata WHERE uname = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $user);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        // User found, verify the password
-        $row = $result->fetch_assoc();
-        if ($pass == $row['pwd']) {
-            
-            // header("Location: donate.php");
-            // Password is correct, redirect to index.html
-            if (isset($_GET['run']) && $_GET['run'] == 'true'){
-                echo "login succesful ";
-                header('Location: donate.php');
-            }
+    $sql = "SELECT * FROM userdata WHERE uname = '$user'";
+    $result = mysqli_query($conn,$sql);
+    $result = mysqli_fetch($result);
+     
+    
+        
+        if ($result->num_rows > 0) {
+            // Successful login
+            echo "Login successful!";
+            // Redirect to another page or perform another action
+            header("Location: profile.php"); // Example redirection
+        } else {
+            // Invalid username or password
+            // header("Location: index.html?error=Invalid username or password");
+            header("Location: profile.php");
+        }
             // $link_id = isset($_POST['link_id']) ? intval($_POST['link_id']) : 0;
             // echo $link_id;
             // header('Location: index.html');
@@ -66,12 +65,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
             
             
             
-        } else {
-            $error_message = "Invalid username or password.";
-        }
-    } else {
-        $error_message = "Invalid username or password.";
-    }
+    //     } else {
+    //         $error_message = "Invalid username or password.";
+    //     }
+    //  else {
+    //     $error_message = "Invalid username or password.";
+    
 
     // Close the connection
     $stmt->close();

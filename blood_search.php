@@ -182,14 +182,14 @@ if ($conn->connect_error) {
 
 // check link id
 // Check if 'id' parameter is set
-if (isset($_GET['id'])) {
-    // Get the value of 'id' parameter
-    $id = $_GET['id'];
+// if (isset($_GET['id'])) {
+//     // Get the value of 'id' parameter
+//     $id = $_GET['id'];
     
-    // Validate and sanitize the 'id' parameter
-    $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
-    header('Location: login.php');
-}
+//     // Validate and sanitize the 'id' parameter
+//     $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+//     header('Location: login.php');
+// }
     
 //     // Output the ID (or use it for further processing)
 //     echo "The ID is: " . htmlspecialchars($id);
@@ -198,29 +198,27 @@ if (isset($_GET['id'])) {
 // }
 
 // Get form data
-$state = $_POST['state'];
-$city = $_POST['city'];
-$bloodgroup = $_POST['bloodgroup'];
+// $dist = $_POST['district'];
+// $city = $_POST['city'];
+// $bloodgroup = $_POST['bloodgroup'];
 
-// Prepare and execute SQL query
-$sql = "SELECT name, age, phno, email FROM donordata WHERE state=? AND city=? AND bloodgroup=?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $state, $city, $bloodgroup);
-$stmt->execute();
-$result = $stmt->get_result();
+// // Prepare and execute SQL query
+// $sql = "SELECT name, age, phno, email FROM donordata WHERE district = $dist AND city = $city AND bloodgroup = $bloodgroup";
+// $result = mysqli_query($conn,$sql);
+// $result1 = mysqli_fetch($result);
 
-// Display results
-if ($result->num_rows > 0) {
-    echo "<h2>List of Blood Donors</h2>";
-    echo "<table border='1'>";
-    echo "<tr><th>Name</th><th>Age</th><th>Contact</th></tr>";
-    while($row = $result->fetch_assoc()) {
-        echo "<tr><td>" . $row["name"]. "</td><td>" . $row["age"]. "</td><td>" . $row["contact"]. "</td></tr>";
-    }
-    echo "</table>";
-} else {
-    echo "No donors found.";
-}
+// // Display results
+// if ($result1->num_rows > 0) {
+//     echo "<h2>List of Blood Donors</h2>";
+//     echo "<table border='1'>";
+//     echo "<tr><th>Name</th><th>Age</th><th>Contact</th></tr>";
+//     while($row = $result1->fetch_assoc()) {
+//         echo "<tr><td>" . $row["name"]. "</td><td>" . $row["age"]. "</td><td>" . $row["contact"]. "</td></tr>";
+//     }
+//     echo "</table>";
+// } else {
+//     echo "No donors found.";
+// }
 
 // Close connection
 $conn->close();
