@@ -29,7 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
     $pass = $_POST['password'];
 
     // SQL query to fetch the user data
+    $query = "UPDATE userdata SET status = 'login' WHERE uname = '$user'";
     $sql = "SELECT * FROM userdata WHERE uname = '$user'";
+    mysqli_query($conn,$query);
     $result = mysqli_query($conn,$sql);
     $result = mysqli_fetch($result);
      
@@ -83,6 +85,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
         <form action="login.php" method="POST">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
+            <select>
+                    <options name="user" value="user">
+                    <options name="admin" value="admin">
+            </select>            
+            
             <input type="submit" value="Login">
         </form>
         <?php
