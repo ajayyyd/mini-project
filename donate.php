@@ -4,6 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blood Donation Entry Form</title>
+    <script>
+      function validateForm() {
+    // Get the values from the form
+    let age = document.forms["donationForm"]["age"].value;
+    let weight = document.forms["donationForm"]["weight"].value;
+    let errorMessage = "";
+
+    // Check age
+    if (age < 18) {
+        alert("Age must be above 18.\n");
+    }
+    // Check weight
+    if (weight < 55) {
+        alert("Weight must be above 55kg.\n");
+    }
+
+    // If there are errors, show an alert and prevent submission
+    if (errorMessage) {
+        alert(errorMessage);
+        return false; // Prevent form submission
+    }
+    return true; // Allow form submission
+}
+
+
+        </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -54,9 +80,17 @@
             color: red;
             font-size: 0.9em;
         }
+        #errorMessages {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid red;
+            background-color: #ffe6e6;
+            color: red;
+}
+
     </style>
     <script>
-        function validateForm() {
+         function validateForm() {
             let age = document.forms["donationForm"]["age"].value;
             let weight = document.forms["donationForm"]["weight"].value;
             let errorMessage = "";
@@ -72,11 +106,15 @@
                 alert(errorMessage);
                 return false;
             }
-            return true;
+
+            // Redirect to the second form after validation
+            window.location.href = "personal_details.php";
+            return false; // Prevent form submission
         }
     </script>
 </head>
 <body>
+
     <div class="container">
         <h1>Blood Donation Entry Form</h1>
         <form name="donationForm" action="process_donation.php" method="POST" onsubmit="return validateForm()">
