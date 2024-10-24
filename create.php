@@ -27,7 +27,8 @@
         }
         .create-account-container input[type="text"],
         .create-account-container input[type="password"],
-        .create-account-container input[type="email"] {
+        .create-account-container input[type="email"],
+        .create-account-container select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -45,6 +46,10 @@
         }
         .create-account-container input[type="submit"]:hover {
             background-color: #45a049;
+        }
+        .message, .error {
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -70,12 +75,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $_POST['username'];
     $email = $_POST['email'];
     $pass = $_POST['password'];
+    $user_type = $_POST['user_type']; // Get the user type
 
-    // // Hash the password for security
-    // $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
-
-    // SQL query to insert the data into the userdata table
-    $sql = "INSERT INTO userdata (uname, email, pwd) VALUES (?, ?, ?)";
+    // SQL query based on user type
+    if ($user_type === 'admin') {
+        $sql = "INSERT INTO admindata (uname, email, pwd) VALUES (?, ?, ?)";
+    } else {
+        $sql = "INSERT INTO userdata (uname, email, pwd) VALUES (?, ?, ?)";
+    }
 
     // Prepare and bind
     $stmt = $conn->prepare($sql);
@@ -100,18 +107,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="text" placeholder="Username" name="username" required>
         <input type="email" placeholder="Email" name="email" required>
         <input type="password" placeholder="Password" name="password" required>
+        User Role: 
+        <select name="user_type" required>
+            <option value="user">User </option>
+            <option value="admin">Admin</option>
+        </select> 
         <input type="submit" value="Create Account">
     </form>
     <?php
-    // Display success or error message
+    // // Display success or error message
     if (isset($smessage)) {
         echo '<div class="message">' . $smessage . '</div>';
         echo '<a href="login.php" class="redirect-btn">Go to Sign In</a>';
     } elseif (isset($emessage)) {
         echo '<div class="error">' . $emessage . '</div>';
     }
-    ?>
-</div>
 
 
 </body>
