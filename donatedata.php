@@ -24,16 +24,24 @@ $bloodgroup = $_POST['bloodgroup'];
 $status = $_POST['status'];
 $district = strtolower($district);
 $city = strtolower($city);
-// Prepare and bind
-$stmt = "INSERT INTO donordata (name, age, phno, email, district, city, bloodgroup, availability) VALUES ($name, $age, $phone, $email, $district, $city, $bloodgroup, $status)";
-mysqli_query($conn,$stmt);
 
+// Main errors in the original code:
+// 1. Values were not properly quoted in the SQL query
+// 2. No proper SQL injection prevention
+// 3. No error handling
 
+// Corrected version using prepared statements
+$stmt = $conn->prepare("INSERT INTO donordata (name, age, phno, email, district, city, bloodgroup, availability) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("siisssss", $name, $age, $phone, $email, $district, $city, $bloodgroup, $status);
 
-// Execute the statement
-// if ($result) {
-//     echo "New record created successfully. <a href='profile.php'>View Profile</a>";
-// } else {
-//     echo "Error: ";
-// }
+// Execute the statement and handle the result
+if ($stmt->execute()) {
+    echo "New record created successfully. <a href='profile.php'>View Profile</a>";
+} else {
+    echo "Error: " . $stmt->error;
+}
+
+// Close the statement and connection
+$stmt->close();
+$conn->close();
 ?>
