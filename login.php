@@ -12,10 +12,10 @@
     // This block will execute when the form is submitted
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Database connection parameters
-        $servername = "localhost";  // Use your database server name
-        $username = "root";         // Your database username
-        $password = "";             // Your database password
-        $dbname = "blooddrive";      // Your database name
+        $servername = "localhost";  
+        $username = "root";         
+        $password = "";             
+        $dbname = "blooddrive";      
 
         // Create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
@@ -28,7 +28,7 @@
         // Get form data
         $user = $_POST['username'];
         $pass = $_POST['password'];
-        $user_type = $_POST['user_type']; // Get the user type
+        $user_type = $_POST['user_type'];
 
         // SQL query to fetch the user data
         if ($user_type === 'admin') {
@@ -47,20 +47,20 @@
 
         // Execute the query
         $stmt->execute();
-        $stmt->store_result(); // Store the result
+        $stmt->store_result();
 
         // Check if the user exists
         if ($stmt->num_rows > 0) {
             if ($user_type === 'admin') {
                 // Bind the result variables for admin
-                $stmt->bind_result($db_username, $db_password); // Only uname and pwd for admin
-                $stmt->fetch(); // Fetch the result
+                $stmt->bind_result($db_username, $db_password);
+                $stmt->fetch();
 
                 // Check password
                 if ($pass === $db_password) {
                     // Successful admin login
-                    $_SESSION['username'] = $user; // Store username in session
-                    $_SESSION['user_type'] = 'admin'; // Store user type in session
+                    $_SESSION['username'] = $user;
+                    $_SESSION['user_type'] = 'admin';
 
                     // Redirect to admin dashboard
                     header("Location: admin_dashboard.php");
@@ -68,14 +68,27 @@
                 }
             } else {
                 // Bind the result variables for user
-                $stmt->bind_result($db_username, $db_password); // uname, pwd, status for user
-                $stmt->fetch(); // Fetch the result
+                $stmt->bind_result($db_username, $db_password);
+                $stmt->fetch();
 
                 // Check password
                 if ($pass === $db_password) {
                     // Successful user login
-                    $_SESSION['username'] = $user; // Store username in session
-                    $_SESSION['user_type'] = 'user'; // Store user type in session
+                    $_SESSION['username'] = $user;
+                    $_SESSION['user_type'] = 'user';
+
+                    // First, clear any existing 'login' status
+                    $clear_sql = "UPDATE userdata SET status = NULL WHERE status = 'login'";
+                    $clear_stmt = $conn->prepare($clear_sql);
+                    $clear_stmt->execute();
+                    $clear_stmt->close();
+
+                    // Then, update status to 'login' for the current user
+                    $update_sql = "UPDATE userdata SET status = 'login' WHERE uname = ?";
+                    $update_stmt = $conn->prepare($update_sql);
+                    $update_stmt->bind_param("s", $user);
+                    $update_stmt->execute();
+                    $update_stmt->close();
 
                     // Redirect to user dashboard
                     header("Location: profile.php");
