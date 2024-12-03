@@ -28,22 +28,21 @@
         // Get form data
         $user = $_POST['username'];
         $pass = $_POST['password'];
-        $user_type = $_POST['user_type'];
 
         // SQL query to fetch the user data
-        if ($user_type === 'admin') {
-            // Admin data only has uname, email, and pwd
-            $sql = "SELECT uname, pwd FROM admindata WHERE uname = ? AND pwd = ?";
-            // Prepare and bind
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $user, $pass);
-        } else {
+        // if ($user_type === 'admin') {
+        //     // Admin data only has uname, email, and pwd
+        //     $sql = "SELECT uname, pwd FROM admindata WHERE uname = ? AND pwd = ?";
+        //     // Prepare and bind
+        //     $stmt = $conn->prepare($sql);
+        //     $stmt->bind_param("ss", $user, $pass);
+        // } else {
             // User data has uname, email, pwd, and status
             $sql = "SELECT uname, pwd FROM userdata WHERE uname = ? AND pwd = ?";
             // Prepare and bind
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ss", $user, $pass);
-        }
+        
 
         // Execute the query
         $stmt->execute();
@@ -51,22 +50,22 @@
 
         // Check if the user exists
         if ($stmt->num_rows > 0) {
-            if ($user_type === 'admin') {
-                // Bind the result variables for admin
-                $stmt->bind_result($db_username, $db_password);
-                $stmt->fetch();
+            // if ($user_type === 'admin') {
+            //     // Bind the result variables for admin
+            //     $stmt->bind_result($db_username, $db_password);
+            //     $stmt->fetch();
 
-                // Check password
-                if ($pass === $db_password) {
-                    // Successful admin login
-                    $_SESSION['username'] = $user;
-                    $_SESSION['user_type'] = 'admin';
+            //     // Check password
+            //     if ($pass === $db_password) {
+            //         // Successful admin login
+            //         $_SESSION['username'] = $user;
+            //         $_SESSION['user_type'] = 'admin';
 
-                    // Redirect to admin dashboard
-                    header("Location: admin_dashboard.php");
-                    exit();
-                }
-            } else {
+            //         // Redirect to admin dashboard
+            //         header("Location: admin_dashboard.php");
+            //         exit();
+            //     }
+            // } else {
                 // Bind the result variables for user
                 $stmt->bind_result($db_username, $db_password);
                 $stmt->fetch();
@@ -93,7 +92,7 @@
                     // Redirect to user dashboard
                     header("Location: profile.php");
                     exit();
-                }
+                
             }
 
             // If the password does not match
@@ -113,12 +112,7 @@
         <h2>Login</h2>
         <form action="login.php" method="POST">
             <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            User Role: 
-            <select name="user_type" required>
-                <option value="user">User </option>
-                <option value="admin">Admin</option>
-            </select>             
+            <input type="password" name="password" placeholder="Password" required>             
             <input type="submit" value="Login">
         </form>
         <?php
