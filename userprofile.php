@@ -37,6 +37,55 @@ if ($stmt->fetch()) {
 }
 $stmt->close();
 
+// Handle form submission for updating profile
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile'])) {
+    $new_username = $_POST['username'];
+    $new_email = $_POST['email'];
+    $new_password = $_POST['password'];
+    
+    // Update user data in the database
+    $update_query = "UPDATE userdata SET uname = ?, email = ?, pwd = ? WHERE uname = ?";
+    $update_stmt = $conn->prepare($update_query);
+    $update_stmt->bind_param("ssss", $new_username, $new_email, $new_password, $db_username);
+    
+    if ($update_stmt->execute()) {
+        // Update session variables
+        $_SESSION['username'] = $new_username;
+        $user['uname'] = $new_username;
+        $user['email'] = $new_email;
+        $user['password'] = $new_password;
+        echo "<script>alert('Profile updated successfully!');</script>";
+    } else {
+        echo "<script>alert('Error updating profile.');</script>";
+    }
+    
+    $update_stmt->close();
+}
+
+// Handle form submission for updating donor information
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_donor'])) {
+    $donor_name = $_POST['donor_name'];
+    $donor_age = $_POST['donor_age'];
+    $donor_phno = $_POST['donor_phno'];
+    $donor_district = $_POST['donor_district'];
+    $donor_city = $_POST['donor_city'];
+    $donor_bloodgroup = $_POST['donor_bloodgroup'];
+    $donor_availability = $_POST['donor_availability'];
+    
+    // Update donor data in the database
+    $donor_update_query = "UPDATE donordata SET name = ?, age = ?, phno = ?, email = ?, district = ?, city = ?, bloodgroup = ?, availability = ? WHERE name = ?";
+    $donor_update_stmt = $conn->prepare($donor_update_query);
+    $donor_update_stmt->bind_param("siissssss", $new_donor_name, $new_donor_age, $new_donor_phno, $new_db_email, $new_donor_district, $new_donor_city, $new_donor_bloodgroup, $new_donor_availability, $donor_name);
+    
+    if ($donor_update_stmt->execute()) {
+        echo "<script>alert('Donor information updated successfully!');</script>";
+    } else {
+        echo "<script>alert('Error updating donor information.');</script>";
+    }
+    
+    $donor_update_stmt->close();
+}
+
 // Fetch donor data from donordata table
 $donor_query = "SELECT name, age, phno, district, city, bloodgroup, availability 
                 FROM donordata 
@@ -73,76 +122,18 @@ $conn->close();
     <title>User Profile</title>
     <link rel="stylesheet" href="userprofile_style.css">
     <style>
-        .profile-info {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .profile-container {
+            max-width: 600px;
+            margin: 20px auto;
             padding: 20px;
-        }
-        
-        .info-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
+            background: white;
             border-radius: 8px;
-        }
-        
-        .info-section h2 {
-            color: #cc0000;
-            margin-bottom: 15px;
-        }
-        
-        .info-item {
-            margin: 10px 0;
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-        }
-        
-        .info-label {
-            font-weight: bold;
-            color: #555;
-            display: inline-block;
-            width: 150px;
-        }
-        
-        .status-available {
-            color: green;
-        }
-        
-        .status-not-available {
-            color: red;
-        }
-
-        .edit-btn {
-            margin-left: 10px;
-            padding: 5px 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .edit-btn:hover {
-            background-color: #45a049;
-        }
-
-        .change-password-form {
-            display: none;
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-        }
-
-        .change-password-form input {
-            margin: 5px 0;
-            padding: 5px;
-        }
-
-        .password-dots {
-            letter-spacing: 2px;
-            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .profile-actions {
@@ -152,131 +143,100 @@ $conn->close();
             justify-content: center;
         }
 
-        .profile-actions button {
-            padding: 10px 20px;
+        button {
+            padding: 10px 15px;
             border: none;
             border-radius: 5px;
+            background-color: #007bff;
+            color: white;
             cursor: pointer;
-            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        h1, h2 {
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="profile-container">
         <h1>User Profile</h1>
-        
-        <!-- Basic User Information -->
-        <div class="info-section">
-            <h2>Account Information</h2>
-            <div class="info-item">
-                <span class="info-label">Username:</span>
-                <?php echo htmlspecialchars($user['uname']); ?>
-                <button class="edit-btn" onclick="editField('username')">Edit</button>
+        <form method="POST" action="">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['uname']); ?>" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($user['password']); ?>" required>
+            
+            <div class="profile-actions">
+                <button type="submit" name="update_profile">Update Profile</button>
+                <button type="button" onclick="toggleEdit()">Edit Profile</button>
             </div>
-            <div class="info-item">
-                <span class="info-label">Email:</span>
-                <?php echo htmlspecialchars($user['email']); ?>
-                <button class="edit-btn" onclick="editField('email')">Edit</button>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Password:</span>
-                <span class="password-dots"><?php echo str_repeat('•', strlen($user['password'])); ?></span>
-                <button class="edit-btn" onclick="togglePasswordChange()">Change Password</button>
-            </div>
-            <div id="passwordChangeForm" class="change-password-form">
-                <input type="password" placeholder="Current Password" id="currentPassword">
-                <input type="password" placeholder="New Password" id="newPassword">
-                <input type="password" placeholder="Confirm New Password" id="confirmPassword">
-                <button onclick="changePassword()">Submit</button>
-                <button onclick="togglePasswordChange()">Cancel</button>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Account Status:</span>
-                <?php echo htmlspecialchars($user['status']); ?>
-            </div>
-        </div>
+        </form>
 
-        <!-- Donor Information -->
-        <div class="info-section">
-            <h2>Donor Information</h2>
-            <?php if ($donor_data): ?>
-                <div class="info-item">
-                    <span class="info-label">Full Name:</span>
-                    <?php echo htmlspecialchars($donor_data['name']); ?>
-                    <button class="edit-btn" onclick="editField('name')">Edit</button>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Age:</span>
-                    <?php echo htmlspecialchars($donor_data['age']); ?>
-                    <button class="edit-btn" onclick="editField('age')">Edit</button>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Phone Number:</span>
-                    <?php echo htmlspecialchars($donor_data['phno']); ?>
-                    <button class="edit-btn" onclick="editField('phone')">Edit</button>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">District:</span>
-                    <?php echo htmlspecialchars($donor_data['district']); ?>
-                    <button class="edit-btn" onclick="editField('district')">Edit</button>
-                </div>
-                <div class="info-item ">
-                    <span class="info-label">City:</span>
-                    <?php echo htmlspecialchars($donor_data['city']); ?>
-                    <button class="edit-btn" onclick="editField('city')">Edit</button>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Blood Group:</span>
-                    <?php echo htmlspecialchars($donor_data['bloodgroup']); ?>
-                    <button class="edit-btn" onclick="editField('bloodgroup')">Edit</button>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Availability:</span>
-                    <span class="status-<?php echo strtolower(str_replace(' ', '-', $donor_data['availability'])); ?>">
-                        <?php echo htmlspecialchars($donor_data['availability']); ?>
-                    </span>
-                    <button class="edit-btn" onclick="editField('availability')">Edit</button>
-                </div>
-            <?php else: ?>
-                <p>No donor information available. Have you registered as a donor?</p>
-                <a href="donate.php" class="cta-btn">Register as Donor</a>
-            <?php endif; ?>
-        </div>
+        <h2>Donor Information</h2>
+        <form method="POST" action="">
+            <label for="donor_name">Name:</label>
+            <input type="text" id="donor_name" name="donor_name" value="<?php echo htmlspecialchars($donor_data['name']); ?>" required>
+            
+            <label for="donor_age">Age:</label>
+            <input type="number" id="donor_age" name="donor_age" value="<?php echo htmlspecialchars($donor_data['age']); ?>" required>
+            
+            <label for="donor_phno">Phone Number:</label>
+            <input type="number" id="donor_phno" name="donor_phno" value="<?php echo htmlspecialchars($donor_data['phno']); ?>" required>
+            
+            <label for="donor_district">District:</label>
+            <input type="text" id="donor_district" name="donor_district" value="<?php echo htmlspecialchars($donor_data['district']); ?>" required>
+            
+            <label for="donor_city">City:</label>
+            <input type="text" id="donor_city" name="donor_city" value="<?php echo htmlspecialchars($donor_data['city']); ?>" required>
+            
+            <label for="donor_bloodgroup">Blood Group:</label>
+            <input type="text" id="donor_bloodgroup" name="donor_bloodgroup" value="<?php echo htmlspecialchars($donor_data['bloodgroup']); ?>" required>
+            
+            <label for="donor_availability">Availability:</label>
+<input type="text" id="donor_availability" name="donor_availability" value="<?php echo htmlspecialchars($donor_data['availability']); ?>" required>
+            
+            <div class="profile-actions">
+                <button type="submit" name="update_donor">Update Donor Information</button>
+            </div>
+        </form>
 
-        <!-- Profile Actions -->
-        <div class="profile-actions">
-            <button onclick="editProfile()">Edit Profile</button>
-            <button onclick="deleteProfile()">Delete Profile</button>
-            <button onclick="window.location.href='profile.php'">Back to Dashboard</button>
-        </div>
+        <h2>Current Donor Information</h2>
+        <?php if ($donor_data): ?>
+            <p>Name: <?php echo htmlspecialchars($donor_data['name']); ?></p>
+            <p>Age: <?php echo htmlspecialchars($donor_data['age']); ?></p>
+            <p>Phone Number: <?php echo htmlspecialchars($donor_data['phno']); ?></p>
+            <p>District: <?php echo htmlspecialchars($donor_data['district']); ?></p>
+            <p>City: <?php echo htmlspecialchars($donor_data['city']); ?></p>
+            <p>Blood Group: <?php echo htmlspecialchars($donor_data['bloodgroup']); ?></p>
+            <p>Availability: <?php echo htmlspecialchars($donor_data['availability']); ?></p>
+        <?php else: ?>
+            <p>No donor information available.</p>
+        <?php endif; ?>
     </div>
-    <script src="userprofile_script.js"></script>
+
+    <script>
+        function toggleEdit() {
+            const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="number"]');
+            inputs.forEach(input => {
+                input.disabled = !input.disabled;
+            });
+        }
+    </script>
 </body>
 </html>
-
-<script>
-    function togglePasswordChange() {
-        document.getElementById("passwordChangeForm").style.display = "block";
-    }
-
-    function changePassword() {
-        // TO DO: Implement password change functionality
-        alert("Password changed successfully!");
-        togglePasswordChange();
-    }
-
-    function editField(field) {
-        // TO DO: Implement field editing functionality
-        alert("Field edited successfully!");
-    }
-
-    function editProfile() {
-        // TO DO: Implement profile editing functionality
-        alert("Profile edited successfully!");
-    }
-
-    function deleteProfile() {
-        // TO DO: Implement profile deletion functionality
-        alert("Profile deleted successfully!");
-    }
-</script>
