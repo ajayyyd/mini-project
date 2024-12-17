@@ -6,32 +6,30 @@
     <title>Save Life Donate Blood</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .profile-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .profile-box {
+        .menu {
             display: none;
             position: absolute;
-            top: 40px;
-            right: 10px;
-            width: 200px;
-            background-color: #f9f9f9;
+            background: white;
             border: 1px solid #ccc;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            right: 10px;
+            top: 60px;
+            width: 200px;
             z-index: 1000;
         }
-        .profile-box a {
-            display: block;
+
+        .menu-item {
             padding: 10px;
-            text-decoration: none;
-            color: blue;
+            text-align: left;
         }
-        .profile-box a:hover {
-            background-color: #eee;
+
+        .menu-item:hover {
+            background: #f0f0f0;
+        }
+
+        .hamburger {
+            cursor: pointer;
+            font-size: 24px;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -42,31 +40,48 @@
         </div>
         <nav>
             <ul>
-                
                 <li><a href="#" class="active">Home</a></li>
                 <li><a href="#">About Us</a></li>
-                <li><a href="blood_search.php">Find Blood</li>
-                <li><a href="create.php">Register Now</a></li>
-                <form action="login.php">
-                <li><button class ="login-btn">Log In</button></li>
-                </form>
-                <li><i class="fas fa-user profile-icon" id="profileIcon"></i>
-                <div class="profile-box" id="profileBox">
-                <a href="userprofile.php">Your Profile</a>
-                </div>
+                <li><a href="blood_search.php">Find Blood</a></li>
+                <li>
+                    <a href="#" class="profile-link">Profile</a>
+                    <span class="hamburger" onclick="toggleMenu()">☰</span>
+                    <div class="menu" id="menu">
+                        <div class="menu-item"><a href="userprofile.php">Edit Profile</a></div>
+                        <div class="menu-item"><a href="delete_account.php">Delete Account</a></div>
+                        <div class="menu-item"><a href="logout.php">Log Out</a></div>
+                        <div class="menu-item"><a href="details.php">Details</a></div>
+                        <div class="menu-item"><a href="requests.php">Requests</a></div>
+                    </div>
                 </li>
             </ul>
-            
         </nav>
     </header>
     <section class="hero">
         <div class="content">
             <h1>Save Life Donate Blood</h1>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry...</p>
             <form action="donate.php">
-            <button class="cta-btn">Donate Blood Now</button>
+                <button class="cta-btn">Donate Blood Now</button>
             </form>
         </div>
     </section>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Close menu if clicking outside of it
+        window.onclick = function(event) {
+            const menu = document.getElementById('menu');
+            if (!event.target.matches('.hamburger') && !event.target.matches('.profile-link')) {
+                menu.style.display = 'none';
+            }
+        }
+    </script>
 </body>
+<?php
+
+?>
 </html>

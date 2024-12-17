@@ -98,3 +98,83 @@ nav ul li a:hover {
     transform: scale(1.01);
     box-shadow: 2px #333 ;
 }
+
+.mission, .collaborators, .steps {
+    padding: 50px 10%;
+    text-align: center;
+}
+
+.mission h2, .collaborators h2, .steps h2 {
+    margin-bottom: 20px;
+}
+
+.collab-logos {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.collab-box {
+    background: #f0f0f0;
+    padding: 30px;
+    width: 100px;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Steps Section */
+.step-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.step {
+    width: 30%;
+    text-align: center;
+}
+
+.step h3 {
+    font-size: 28px;
+    color: #a2002e;
+    margin-bottom: 10px;
+}
+
+/* Footer */
+footer {
+    background: #111;
+    color: white;
+    padding: 30px 10%;
+}
+
+.footer-top, .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.footer-top input {
+    padding: 10px;
+    border: none;
+    margin-right: 10px;
+}
+
+.footer-top button {
+    background: #a2002e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+}
+
+.links ul {
+    list-style: none;
+}
+
+.links p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+  
+  
+  

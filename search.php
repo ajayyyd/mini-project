@@ -94,6 +94,12 @@ $result = $conn->query($sql);
         .back-button:hover {
             background-color: #e60000;
         }
+
+        .button-container {
+            display: flex;
+            gap: 10px; /* Adjusts the space between the buttons */
+            margin-top: 20px; /* Adds some space above the buttons */
+        }
     </style>
 </head>
 <body>
@@ -115,7 +121,15 @@ $result = $conn->query($sql);
         }
         $conn->close();
         ?>
-        <a href="index.html" class="back-button">Go Back</a>
+        <div class="button-container">
+            <a href="blood_search.php" class="back-button">Go Back</a>
+            <!-- Button to Request Blood -->
+            <form action="login.php" method="GET">
+                <input type="hidden" name="redirect" value="blood_request.php">
+                <button type="submit" class="back-button">Request Blood</button>
+            </form>
+    </div>
+
     </div>
 </body>
 </html>

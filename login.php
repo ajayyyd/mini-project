@@ -67,12 +67,14 @@
             //     }
             // } else {
                 // Bind the result variables for user
+                
                 $stmt->bind_result($db_username, $db_password);
                 $stmt->fetch();
 
                 // Check password
                 if ($pass === $db_password) {
                     // Successful user login
+                    $_SESSION['userid'] = $row['userid'];
                     $_SESSION['username'] = $user;
                     $_SESSION['user_type'] = 'user';
 
@@ -107,23 +109,58 @@
         $conn->close();
     }
     ?>
-    <h1>bloodrive.org</h1>
-    <div class="login-box">
-        <h2>Login</h2>
-        <form action="login.php" method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>             
+    <body>
+    <div class="center">
+        <h2 style="color: #af1905;">User Login</h2>
+        <form action="" method="post">
+            <div class="txt_field">
+                <input type="text" name="username" required>
+                <span></span>
+                <label>Username</label>
+            </div>
+            <div class="txt_field">
+
+                <input type="password" name="password" required id="password">
+                
+                <img src="images/eyeclose.png" onclick="pass()" id="eyeicon" width="25px" 
+                style="float: right; cursor: pointer; position: absolute; right: 15px; top: 8px;">
+                <span></span>
+                <label>Password</label>
+            </div>
+
             <input type="submit" value="Login">
+            <div class="signup">
+                Not a member?<a href="create.php" >SignUp</a><br>
+                <br><button class="button"><a href="index.html" id="home" style="color: white;">Back to Home</a></button>
+            </div>
         </form>
+    </div>
+  <script>
+
+    /* password view/hide toggle function */
+    var a;
+    function pass()
+    {
+        if(a==1)
+    {
+        document.getElementById('password').type='password';
+        document.getElementById('eyeicon').src='images/eyeclose.png';
+        a=0;
+    }
+    else
+    {
+        document.getElementById('password').type='text';
+        document.getElementById('eyeicon').src='images/eye.png';
+        a=1;
+    }
+    }
+  </script>
+</body>
         <?php
         // Display error message if login fails
         if (isset($error_message)) {
             echo '<div class="error">' . $error_message . '</div>';
         }
         ?>
-        <div class="create-account">
-            <p>Don't have an account? <a href="create.php">Create New Account</a></p>
-        </div>
-    </div>
 </body>
 </html>

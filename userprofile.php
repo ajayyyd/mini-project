@@ -124,7 +124,9 @@ $conn->close();
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #ffffff;
+            color: #333;
+            background: linear-gradient(to bottom right,rgb(156, 0, 0),rgb(255, 255, 255));
         }
 
         .profile-container {
