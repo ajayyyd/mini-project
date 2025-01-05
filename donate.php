@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blood Donation Entry Form</title>
+    <?php
+        session_start(); // Start the session
+
+        // Check if the user is logged in
+        if (!isset($_SESSION['username'])) {
+            // User is not logged in, redirect to login page
+            header("Location: login.php");
+            exit(); // Ensure no further code is executed
+        }
+
+        // If the user is logged in, proceed to donateblood.php
+        header("Location: donateblood.php");
+        exit();
+    ?>
     <script>
       function validateForm() {
     // Get the values from the form
